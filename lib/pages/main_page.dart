@@ -1,100 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:pr3/components/product_card.dart';
-import 'package:pr3/models/product.dart';
-import 'package:pr3/pages/favorite_page.dart';
-import 'package:pr3/pages/profile_pages.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../components/service_card.dart';
+import '../models/service.dart';
 
-import '../components/navbar.dart';
-import 'package:pr3/pages/cart_page.dart';
+class MainPage extends StatelessWidget {
+  const MainPage({
+    super.key,
+    required this.services,
+    required this.addToCart
+  });
 
-import '../mocks/products.dart';
-import '../models/user.dart';
-
-import 'add_product_page.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final User user = User(
-    avatarUrl: 'https://sun9-64.userapi.com/impg/tg8c3xWlTr_nnZOXWD7zGJBwq64CPP-N2tuTlQ/A88lcCiStPI.jpg?size=1620x2160&quality=95&sign=ad3b1971ec502574abdc6ea0f8b1ef2b&type=album',
-    email: 'tytemail@email.ru',
-    fullName: 'Аксенов Кирилл Викторович',
-    phoneNumber: '8 (999)-999-99-99',
-  );
-
-  void _removeProduct(Product product) {
-    setState(() {
-      products.remove(product);
-    });
-  }
-
-  int _currentIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  List<Product> get favoriteProducts => products.where((product) => product.isFavorite).toList();
-  List<Product> get cart => products.where((product) => product.isInCart).toList();
+  final List<Service> services;
+  final Function addToCart;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [
-      _buildHomePage(),
-      FavoritePage(
-        products: favoriteProducts,
-        onProductRemove: (context){_removeProduct(context);},
-      ),
-      CartPage(cartProducts: cart),
-      ProfilePage(user: user),
-    ];
-
     return Scaffold(
-      body: pages[_currentIndex],
-      bottomNavigationBar: Navbar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-
-Widget _buildHomePage() {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Все товары'),),
-        backgroundColor: Colors.white,
-        body: ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (BuildContext context, int index){
-              return ProductCard(product: products[index], onProductRemove: () {
-                _removeProduct(products[index]);
-              },);
-            }
-
+      body: Padding(
+        padding: const EdgeInsets.only(
+            top: 48.0,
+            left: 27.0,
+            right: 27.0
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddProductPage(onItemAdded: (newItem) {
-                  setState(() {
-                    newItem.id = products.length + 1;
-                    products.add(newItem);
-                  });
-                }),
-              ),
-            );
-          },
-          child: const Icon(Icons.add),
-    ),
+        child: ListView(
+          children: [
+            Text("Каталог услуг",
+                textAlign: TextAlign.left,
+                style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                      height: 28 / 24,
+                      letterSpacing: 24.0 * -0.0033,
+                    )
+                )
+            ),
+            const SizedBox(height: 30),
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: services.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0
+                  ),
+                  child: ServiceCard(
+                      service: services[index],
+                      onAdd: () => addToCart(services[index])
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }
-
