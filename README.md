@@ -1,8 +1,10 @@
-# Практическая работа №3
+# Практическая работа №5
 
 ## Аксенов К.В ЭФБО-01-22
 
-Свертал страницу всех товаров
-![studio64_Or2Nu4SC9E.png](studio64_Or2Nu4SC9E.png)
-При нажатии на карточку товара пользователь попадает на страницу этого товара
-![studio64_vq0oPe8vzE.png](studio64_vq0oPe8vzE.png)
+Добавил возможность добавления товара в избранное
+Страница профиля
+Список избранных товаров
+![studio64_MB8xkXRrsC.png](studio64_MB8xkXRrsC.png)
+![studio64_vDSiNDjaSp.png](studio64_vDSiNDjaSp.png)
+![studio64_ZgTOkU09ly.png](studio64_ZgTOkU09ly.png)

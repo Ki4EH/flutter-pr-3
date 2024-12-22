@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:pr3/components/product_card.dart';
 import 'package:pr3/models/product.dart';
+import 'package:pr3/pages/favorite_page.dart';
+import 'package:pr3/pages/profile_pages.dart';
+
+import '../mocks/products.dart';
+import '../models/user.dart';
+
+import 'add_product_page.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final User user = User(
+    avatarUrl: 'https://sun9-64.userapi.com/impg/tg8c3xWlTr_nnZOXWD7zGJBwq64CPP-N2tuTlQ/A88lcCiStPI.jpg?size=1620x2160&quality=95&sign=ad3b1971ec502574abdc6ea0f8b1ef2b&type=album',
+    email: 'tytemail@email.ru',
+    fullName: 'Аксенов Кирилл Викторович',
+    phoneNumber: '8 (999)-999-99-99',
+  );
 
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
 
-  final List<Product> products = [
-    Product(1, '1000 ГБ, с дисководом, Bluetooth 5.1, Wi-Fi 6 (802.11ax), HDMI 2.1, до 8K UltraHD, 7680x4320x', 5, 'Игровая Консоль', 'Игровая консоль PlayStation 5 Slim',67999,'https://c.dns-shop.ru/thumb/st4/fit/500/500/1e42cea75917ec29fb644691db846be6/429dffed72e676f83a402909877cf023018d6b593893afdcadc7bf965f1b7ca0.jpg.webp'),
-    Product(2, '1000 ГБ, с дисководом, Wi-Fi 5 (802.11ac), HDMI 2.1, до 4K UltraHD, 3840x2160', 1, 'Игровая Консоль', 'Игровая консоль Microsoft Xbox Series X',64999,'https://c.dns-shop.ru/thumb/st4/fit/500/500/b4562592dd38dc2a80405bd2fd3f8374/92f5cbbe76cbccb59e28290a71366bae0581ff7ea0ece9b90426275db520108a.jpg.webp'),
-    Product(3, '32 ГБ, экран 6.2", IPS, 1280x720, Bluetooth 4.1, Wi-Fi 5 (802.11ac)', 52, 'Игровая Консоль', 'Игровая консоль Nintendo Switch красный, синий',31999,'https://c.dns-shop.ru/thumb/st4/fit/500/500/aa4e05ff7e95a6234ec4bce4460ca2d9/21fef0dd1f93a3e7deca21ba0c350c748d719d09b84ef593cf241ae813b97439.jpg.webp'),
-  ];
+  int _currentIndex = 0;
+
+  List<Product> get favoriteProducts => products.where((product) => product.isFavorite).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +41,56 @@ class MyHomePage extends StatelessWidget {
               return ProductCard(product: products[index]);
             }
 
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddProductPage(onItemAdded: (newItem) {
+                  setState(() {
+                    newItem.id = products.length + 1;
+                    products.add(newItem);
+                  });
+                }),
+              ),
+            );
+          },
+          child: const Icon(Icons.add),
+    ),
+    bottomNavigationBar: BottomNavigationBar(
+    currentIndex: _currentIndex,
+    onTap: (index) {
+    setState(() {
+    _currentIndex = index;
+    });
+    if (index == 1) {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => FavoritePage(products: favoriteProducts)),
+    );
+    } else if (index == 2) {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ProfilePage(user: user)),
+    );
+    }
+    },
+    items: const [
+    BottomNavigationBarItem(
+    icon: Icon(Icons.list),
+    label: 'Товары',
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.favorite),
+    label: 'Избранное',
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.person),
+    label: 'Профиль',
+    ),
+    ],
+          backgroundColor: Colors.grey,
         )
     );
   }
