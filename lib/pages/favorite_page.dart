@@ -5,7 +5,9 @@ import 'package:pr3/models/product.dart';
 class FavoritePage extends StatelessWidget {
   final List<Product> products;
 
-  const FavoritePage({super.key, required this.products});
+  final Function(Product) onProductRemove;
+
+  const FavoritePage({super.key, required this.products, required this.onProductRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,9 @@ class FavoritePage extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ProductCard(
             product: products[index],
+            onProductRemove: () {
+              onProductRemove(products[index]);
+            },
           );
         },
       ),

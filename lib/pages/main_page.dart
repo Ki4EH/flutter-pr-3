@@ -4,6 +4,9 @@ import 'package:pr3/models/product.dart';
 import 'package:pr3/pages/favorite_page.dart';
 import 'package:pr3/pages/profile_pages.dart';
 
+import '../components/navbar.dart';
+import 'package:pr3/pages/cart_page.dart';
+
 import '../mocks/products.dart';
 import '../models/user.dart';
 
@@ -24,21 +27,54 @@ class _HomePageState extends State<HomePage> {
     phoneNumber: '8 (999)-999-99-99',
   );
 
-
+  void _removeProduct(Product product) {
+    setState(() {
+      products.remove(product);
+    });
+  }
 
   int _currentIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   List<Product> get favoriteProducts => products.where((product) => product.isFavorite).toList();
+  List<Product> get cart => products.where((product) => product.isInCart).toList();
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      _buildHomePage(),
+      FavoritePage(
+        products: favoriteProducts,
+        onProductRemove: (context){_removeProduct(context);},
+      ),
+      CartPage(cartProducts: cart),
+      ProfilePage(user: user),
+    ];
+
+    return Scaffold(
+      body: pages[_currentIndex],
+      bottomNavigationBar: Navbar(
+        currentIndex: _currentIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+Widget _buildHomePage() {
     return Scaffold(
         appBar: AppBar(title: const Text('Все товары'),),
         backgroundColor: Colors.white,
         body: ListView.builder(
             itemCount: products.length,
             itemBuilder: (BuildContext context, int index){
-              return ProductCard(product: products[index]);
+              return ProductCard(product: products[index], onProductRemove: () {
+                _removeProduct(products[index]);
+              },);
             }
 
         ),
@@ -58,40 +94,6 @@ class _HomePageState extends State<HomePage> {
           },
           child: const Icon(Icons.add),
     ),
-    bottomNavigationBar: BottomNavigationBar(
-    currentIndex: _currentIndex,
-    onTap: (index) {
-    setState(() {
-    _currentIndex = index;
-    });
-    if (index == 1) {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => FavoritePage(products: favoriteProducts)),
-    );
-    } else if (index == 2) {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ProfilePage(user: user)),
-    );
-    }
-    },
-    items: const [
-    BottomNavigationBarItem(
-    icon: Icon(Icons.list),
-    label: 'Товары',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.favorite),
-    label: 'Избранное',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.person),
-    label: 'Профиль',
-    ),
-    ],
-          backgroundColor: Colors.grey,
-        )
     );
   }
 }

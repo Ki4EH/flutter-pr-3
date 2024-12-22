@@ -7,16 +7,26 @@ import '../models/product.dart';
 class ProductCard extends StatefulWidget {
   final Product product;
 
-  const ProductCard({super.key, required this.product});
+  final Function() onProductRemove;
+
+  const ProductCard({super.key, required this.product, required this.onProductRemove});
+
 
   @override
   _ProductCardState createState() => _ProductCardState();
 }
 
+
 class _ProductCardState extends State<ProductCard> {
   void toggleFavorite() {
     setState(() {
       widget.product.isFavorite = !widget.product.isFavorite;
+    });
+  }
+
+  void toggleCart(){
+    setState(() {
+      widget.product.isInCart = !widget.product.isInCart;
     });
   }
 
@@ -30,7 +40,8 @@ class _ProductCardState extends State<ProductCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductPage(product: widget.product),
+              builder: (context) => ProductPage(product: widget.product,
+                  onProductRemove:  widget.onProductRemove),
             ),
           );
         },
@@ -81,6 +92,8 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                   const SizedBox(height: 8),
+              Row(
+                children: [
                   Text(
                     '${widget.product.price}₽',
                     style: const TextStyle(
@@ -89,6 +102,20 @@ class _ProductCardState extends State<ProductCard> {
                       color: Colors.black,
                     ),
                   ),
+                  IconButton(
+                    icon: Icon(
+                      widget.product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: widget.product.isFavorite ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: toggleFavorite,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      widget.product.isInCart ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+                    ),
+                    onPressed: toggleCart,
+                  ),
+                ],),
                   const SizedBox(height: 4),
                 ],
               ),

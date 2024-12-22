@@ -1,10 +1,8 @@
-# Практическая работа №5
+# Практическая работа №6
 
 ## Аксенов К.В ЭФБО-01-22
 
-Добавил возможность добавления товара в избранное
-Страница профиля
-Список избранных товаров
-![studio64_MB8xkXRrsC.png](studio64_MB8xkXRrsC.png)
-![studio64_vDSiNDjaSp.png](studio64_vDSiNDjaSp.png)
-![studio64_ZgTOkU09ly.png](studio64_ZgTOkU09ly.png)
+Итог работы </br>
+[Видео](Screen_recording_20241222_185424.mp4)
+
+![](Screen_recording_20241222_185424.mp4)
