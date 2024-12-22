@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pr3/components/product_card.dart';
 import 'package:pr3/models/product.dart';
 
+import 'add_product_page.dart';
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<Product> products = [
     Product(1, '1000 ГБ, с дисководом, Bluetooth 5.1, Wi-Fi 6 (802.11ax), HDMI 2.1, до 8K UltraHD, 7680x4320x', 5, 'Игровая Консоль', 'Игровая консоль PlayStation 5 Slim',67999,'https://c.dns-shop.ru/thumb/st4/fit/500/500/1e42cea75917ec29fb644691db846be6/429dffed72e676f83a402909877cf023018d6b593893afdcadc7bf965f1b7ca0.jpg.webp'),
     Product(2, '1000 ГБ, с дисководом, Wi-Fi 5 (802.11ac), HDMI 2.1, до 4K UltraHD, 3840x2160', 1, 'Игровая Консоль', 'Игровая консоль Microsoft Xbox Series X',64999,'https://c.dns-shop.ru/thumb/st4/fit/500/500/b4562592dd38dc2a80405bd2fd3f8374/92f5cbbe76cbccb59e28290a71366bae0581ff7ea0ece9b90426275db520108a.jpg.webp'),
@@ -23,6 +29,23 @@ class MyHomePage extends StatelessWidget {
               return ProductCard(product: products[index]);
             }
 
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddProductPage(onItemAdded: (newItem) {
+                  setState(() {
+                    newItem.id = products.length + 1;
+                    products.add(newItem);
+                  });
+                }),
+              ),
+            );
+          },
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.grey,
         )
     );
   }
